@@ -1,0 +1,35 @@
+name: Build Images
+
+on:
+  schedule:
+    - cron: '0 10 * * *' # everyday at 10am UTC
+  release:
+    types: [ published ]
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  tcr:
+    name: TCR
+    uses: XNXKTech/workflows/.github/workflows/docker-build.yml@main
+    with:
+      registry: 'registry.xnxktech.net'
+      platforms: linux/amd64,linux/arm64
+    secrets:
+      USERNAME: ${{ secrets.REGISTRY_USER }}
+      PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+  dockerhub:
+    name: DockerHub
+    uses: XNXKTech/workflows/.github/workflows/docker-build.yml@main
+    with:
+      platforms: linux/amd64,linux/arm64
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
