@@ -9,3 +9,7 @@ RUN mkdir -p "${HOME}/.docker/cli-plugins" \
   && curl -SsL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" -o "${HOME}/.docker/cli-plugins/docker-compose" \
   && chmod +x "${HOME}/.docker/cli-plugins/docker-buildx" \
   && chmod +x "${HOME}/.docker/cli-plugins/docker-compose"
+
+# Node
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - \
+    && sudo apt-get install -y nodejs
