@@ -11,5 +11,15 @@ RUN mkdir -p "${HOME}/.docker/cli-plugins" \
   && chmod +x "${HOME}/.docker/cli-plugins/docker-compose"
 
 # Node
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - \
-    && sudo apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - \
+    && sudo apt-get install -y nodejs \
+    && npm install -g yarn
+
+RUN mkdir $HOME/.npm-global \
+    && npm config set prefix $HOME/.npm-global
+
+RUN echo 'PATH=${HOME}/.npm-global/bin:${PATH}' > $HOME/environment \
+    && echo 'ImageOS=${ImageOS}' >> $HOME/environment \
+    && sudo mv $HOME/environment /etc/environment
+
+ENV PATH=${HOME}/.npm-global/bin:${PATH}
