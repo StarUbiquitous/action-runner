@@ -5,6 +5,8 @@ ARG RUNNER_VERSION=2.294.0
 ARG DOCKER_CHANNEL=stable
 ARG DOCKER_VERSION=20.10.12
 ARG DUMB_INIT_VERSION=1.2.5
+ARG BUILDX_VERSION=v0.8.2
+ARG DOCKER_COMPOSE_VERSION=v2.6.0
 
 RUN test -n "$TARGETPLATFORM" || (echo "TARGETPLATFORM must be set" && false)
 
@@ -66,7 +68,7 @@ RUN set -vx; \
     && usermod -aG docker runner \
     && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers
 
-ENV HOME=/home/runner
+ENV HOME=/root
 
 # Uncomment the below COPY to use your own custom build of actions-runner.
 #
@@ -110,9 +112,6 @@ RUN mkdir /opt/hostedtoolcache \
     && chgrp docker /opt/hostedtoolcache \
     && chmod g+rwx /opt/hostedtoolcache
 
-ARG BUILDX_VERSION=v0.8.2
-ARG DOCKER_COMPOSE_VERSION=v2.6.0
-
 # Docker Plugins
 RUN mkdir -p "${HOME}/.docker/cli-plugins" \
   && curl -SsL "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" -o "${HOME}/.docker/cli-plugins/docker-buildx" \
@@ -125,20 +124,19 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g yarn
 
-RUN mkdir $HOME/.npm-global \
-    && npm config set prefix $HOME/.npm-global
-
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
 COPY entrypoint.sh logger.bash /usr/bin/
 
-ENV PATH="${HOME}/.npm-global/bin:${PATH}:${HOME}/.local/bin:"
+ENV PATH="${PATH}:${HOME}/.local/bin:"
 ENV ImageOS=ubuntu20
+ENV RUNNER_ALLOW_RUNASROOT="1"
 
 RUN echo "PATH=${PATH}" > /etc/environment \
     && echo "ImageOS=${ImageOS}" >> /etc/environment
 
-USER runner
+USER root
+WORKDIR /root/
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["entrypoint.sh"]
