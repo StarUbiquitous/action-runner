@@ -135,6 +135,8 @@ ENV RUNNER_ALLOW_RUNASROOT="1"
 RUN echo "PATH=${PATH}" > /etc/environment \
     && echo "ImageOS=${ImageOS}" >> /etc/environment
 
+RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
+
 USER root
 WORKDIR /root/
 
