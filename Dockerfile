@@ -124,6 +124,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g yarn
 
+RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
+
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
 COPY entrypoint.sh logger.bash /usr/bin/
@@ -134,8 +136,6 @@ ENV RUNNER_ALLOW_RUNASROOT="1"
 
 RUN echo "PATH=${PATH}" > /etc/environment \
     && echo "ImageOS=${ImageOS}" >> /etc/environment
-
-RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
 
 USER root
 WORKDIR /root/
