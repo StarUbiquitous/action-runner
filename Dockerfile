@@ -131,6 +131,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && npm install -g yarn
 
 RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
+RUN npm cache clean --force
 
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
