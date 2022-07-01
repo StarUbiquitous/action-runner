@@ -14,10 +14,10 @@ Provide image for [@XNXKTech](https://github.com/XNXKTech) on self-hosted GitHub
 
 ## Available Environments
 
-| Environment                         | YAML Label | CI Status                                                                                                                                                                                                     |
-|-------------------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Ubuntu 22.04 <sup>Coming soon</sup> |            | [![Build Images](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml/badge.svg?branch=main&event=label)](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml) |
-| Ubuntu 20.04                        | `latest`   | [![Build Images](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml/badge.svg)](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml)                         |
+| Environment                  | YAML Label     | CI Status                                                                                                                                                                                                 |
+|------------------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Ubuntu 22.04 <sup>beta</sup> | `ubuntu-22.04` | [![Build Images](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml/badge.svg?branch=ubuntu-22.04)](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml) |
+| Ubuntu 20.04                 | `latest`       | [![Build Images](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml/badge.svg)](https://github.com/StarUbiquitous/action-runner/actions/workflows/build.yml)                     |
 
 ## Installed Software
 
