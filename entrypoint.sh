@@ -9,14 +9,6 @@ if [ ! -z "${STARTUP_DELAY_IN_SECONDS}" ]; then
   sleep ${STARTUP_DELAY_IN_SECONDS}
 fi
 
-if [[ "${DISABLE_WAIT_FOR_DOCKER}" != "true" ]] && [[ "${DOCKER_ENABLED}" == "true" ]]; then
-    log.debug 'Docker enabled runner detected and Docker daemon wait is enabled'
-    log.debug 'Waiting until Docker is available or the timeout is reached'
-    timeout 120s bash -c 'until docker ps ;do sleep 1; done'
-else
-  log.notice 'Docker wait check skipped. Either Docker is disabled or the wait is disabled, continuing with entrypoint'
-fi
-
 if [ -z "${GITHUB_URL}" ]; then
   log.debug 'Working with public GitHub'
   GITHUB_URL="https://github.com/"
@@ -140,13 +132,12 @@ if [ -z "${UNITTEST:-}" ] && [ -e ./externalstmp ]; then
   mv ./externalstmp/* ./externals/
 fi
 
-args=()
-if [ "${RUNNER_FEATURE_FLAG_ONCE:-}" == "true" -a "${RUNNER_EPHEMERAL}" == "true" ]; then
-  args+=(--once)
-  log.warning 'Passing --once is deprecated and will be removed as an option' \
-    'from the image and actions-runner-controller at the release of 0.25.0.' \
-    'Upgrade to GHES => 3.3 to continue using actions-runner-controller. If' \
-    'you are using github.com ignore this warning.'
+if [[ "${DISABLE_WAIT_FOR_DOCKER}" != "true" ]] && [[ "${DOCKER_ENABLED}" == "true" ]]; then
+    log.debug 'Docker enabled runner detected and Docker daemon wait is enabled'
+    log.debug 'Waiting until Docker is available or the timeout is reached'
+    timeout 120s bash -c 'until docker ps ;do sleep 1; done'
+else
+  log.notice 'Docker wait check skipped. Either Docker is disabled or the wait is disabled, continuing with entrypoint'
 fi
 
 # Unset entrypoint environment variables so they don't leak into the runner environment
@@ -164,4 +155,4 @@ unset RUNNER_NAME RUNNER_REPO RUNNER_TOKEN STARTUP_DELAY_IN_SECONDS DISABLE_WAIT
 if [ -z "${UNITTEST:-}" ]; then
   mapfile -t env </etc/environment
 fi
-exec env -- "${env[@]}" ./run.sh "${args[@]}"
+exec env -- "${env[@]}" ./run.sh
