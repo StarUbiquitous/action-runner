@@ -66,10 +66,32 @@ RUN set -vx; \
     && adduser --disabled-password --gecos "" --uid 1000 runner \
     && groupadd docker \
     && usermod -aG sudo runner \
+    && usermod -aG sudo root \
     && usermod -aG docker runner \
     && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers
 
-ENV HOME=/root
+# Docker Plugins
+RUN mkdir -p "${HOME}/.docker/cli-plugins" \
+  && curl -SsL "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" -o "${HOME}/.docker/cli-plugins/docker-buildx" \
+  && curl -SsL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" -o "${HOME}/.docker/cli-plugins/docker-compose" \
+  && chmod +x "${HOME}/.docker/cli-plugins/docker-buildx" \
+  && chmod +x "${HOME}/.docker/cli-plugins/docker-compose"
+
+# GH Actions
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && apt update -y  \
+    && apt-get install -y gh
+
+# Node
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g yarn
+
+# Cloudbase
+RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
+RUN npm cache clean --force
 
 # Uncomment the below COPY to use your own custom build of actions-runner.
 #
@@ -118,31 +140,14 @@ RUN mkdir /opt/hostedtoolcache \
     && chgrp docker /opt/hostedtoolcache \
     && chmod g+rwx /opt/hostedtoolcache
 
-# Docker Plugins
-RUN mkdir -p "${HOME}/.docker/cli-plugins" \
-  && curl -SsL "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-amd64" -o "${HOME}/.docker/cli-plugins/docker-buildx" \
-  && curl -SsL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" -o "${HOME}/.docker/cli-plugins/docker-compose" \
-  && chmod +x "${HOME}/.docker/cli-plugins/docker-buildx" \
-  && chmod +x "${HOME}/.docker/cli-plugins/docker-compose"
-
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-    && apt update -y  \
-    && apt-get install -y gh
-
-# Node
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g yarn
-
-RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
-RUN npm cache clean --force
-
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
-COPY entrypoint.sh logger.bash /usr/bin/
+COPY entrypoint.sh logger.bash update-status /usr/bin/
 
+# Configure hooks folder structure.
+COPY hooks /etc/arc/hooks/
+
+ENV HOME=/root
 ENV PATH="${PATH}:${HOME}/.local/bin:"
 ENV ImageOS=ubuntu20
 ENV RUNNER_ALLOW_RUNASROOT="1"
