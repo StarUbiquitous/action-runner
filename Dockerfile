@@ -148,12 +148,14 @@ COPY entrypoint.sh logger.bash update-status /usr/bin/
 COPY hooks /etc/arc/hooks/
 
 ENV HOME=/root
-ENV PATH="${PATH}:${HOME}/.local/bin:"
+ENV PATH="${PATH}:${HOME}/.local/bin"
 ENV ImageOS=ubuntu20
 ENV RUNNER_ALLOW_RUNASROOT="1"
 
 RUN echo "PATH=${PATH}" > /etc/environment \
     && echo "ImageOS=${ImageOS}" >> /etc/environment
+
+RUN export PATH="$PATH:${HOME}/node_modules/.bin"
 
 USER root
 WORKDIR /root/
