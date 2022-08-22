@@ -153,7 +153,8 @@ ENV ImageOS=ubuntu20
 ENV RUNNER_ALLOW_RUNASROOT="1"
 
 RUN echo "PATH=${PATH}" > /etc/environment \
-    && echo "ImageOS=${ImageOS}" >> /etc/environment
+    && echo "ImageOS=${ImageOS}" >> /etc/environment \
+    && export PATH="$PATH:$(yarn bin)"
 
 RUN export PATH="$PATH:${HOME}/node_modules/.bin"
 
