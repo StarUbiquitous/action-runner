@@ -148,7 +148,8 @@ COPY entrypoint.sh logger.bash update-status /usr/bin/
 COPY hooks /etc/arc/hooks/
 
 ENV HOME=/root
-ENV PATH="${PATH}:${HOME}/.local/bin:"
+ENV PATH="${PATH}:${HOME}/.local/bin"
+ENV PATH="${PATH}:${HOME}/node_modules/.bin"
 ENV ImageOS=ubuntu20
 ENV RUNNER_ALLOW_RUNASROOT="1"
 
