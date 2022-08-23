@@ -1,3 +1,5 @@
+FROM docker.io/library/golang:1.19-buster as golang
+
 FROM ubuntu:20.04
 
 ARG TARGETPLATFORM
@@ -140,6 +142,8 @@ RUN mkdir /opt/hostedtoolcache \
     && chgrp docker /opt/hostedtoolcache \
     && chmod g+rwx /opt/hostedtoolcache
 
+COPY --from=golang "/usr/local/go/" "/usr/local/go/"
+
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
 COPY entrypoint.sh logger.bash update-status /usr/bin/
@@ -150,6 +154,7 @@ COPY hooks /etc/arc/hooks/
 ENV HOME=/root
 ENV PATH="${PATH}:${HOME}/.local/bin"
 ENV PATH="${PATH}:${HOME}/node_modules/.bin"
+ENV PATH="/usr/local/go/bin:${PATH}"
 ENV ImageOS=ubuntu20
 ENV RUNNER_ALLOW_RUNASROOT="1"
 
