@@ -2,5 +2,23 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      // automatically merge an update of runner
+      "matchPackageNames": ["actions/runner"],
+      "extractVersion": "^v(?<version>.*)$",
+      "automerge": true
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": ["RUNNER_VERSION=+(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "actions/runner",
+      "datasourceTemplate": "github-releases"
+    }
   ]
 }
