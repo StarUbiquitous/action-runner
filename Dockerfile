@@ -92,8 +92,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g yarn
 
-# Cloudbase
-RUN npm install -g @cloudbase/cli --loglevel=error --no-fund --no-audit --no-progress
 RUN npm cache clean --force
 
 # Uncomment the below COPY to use your own custom build of actions-runner.

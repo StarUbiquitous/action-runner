@@ -45,7 +45,6 @@ Provide image for [@XNXKTech](https://github.com/XNXKTech) on self-hosted GitHub
 
 ### CLI Tools
 
-- Cloudbase cli 2.0.9
 - GitHub CLI 2.13.0
 
 ## License
