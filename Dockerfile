@@ -45,6 +45,7 @@ RUN apt update -y \
     wget \
     zip \
     zstd \
+    libsodium-dev \
     && ln -sf /usr/bin/python3 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
     && rm -rf /var/lib/apt/lists/*
