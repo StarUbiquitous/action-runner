@@ -19,6 +19,38 @@
       "matchStrings": ["RUNNER_VERSION=+(?<currentValue>.*?)\\n"],
       "depNameTemplate": "actions/runner",
       "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": ["DOCKER_COMPOSE_VERSION=+(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "docker/compose",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": ["BUILDX_VERSION=+(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "docker/buildx",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": ["RUNNER_CONTAINER_HOOKS_VERSION=+(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "actions/runner-container-hooks",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": ["DUMB_INIT_VERSION=+(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "Yelp/dumb-init",
+      "datasourceTemplate": "github-releases"
     }
   ]
 }
