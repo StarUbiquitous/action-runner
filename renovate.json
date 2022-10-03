@@ -5,7 +5,6 @@
   ],
   "packageRules": [
     {
-      // automatically merge an update of runner
       "matchPackageNames": ["actions/runner"],
       "extractVersion": "^v(?<version>.*)$",
       "automerge": true
