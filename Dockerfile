@@ -133,7 +133,7 @@ RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
     && rm -rf /var/lib/apt/lists/*
 
 RUN cd "$RUNNER_ASSETS_DIR" \
-    && curl -f -L -o runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
+    && curl -f -L -o runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-$(echo $RUNNER_CONTAINER_HOOKS_VERSION| cut -d "v" -f 2).zip \
     && unzip ./runner-container-hooks.zip -d ./k8s \
     && rm runner-container-hooks.zip
 
