@@ -13,7 +13,7 @@ jobs:
     name: TCR
     uses: XNXKTech/workflows/.github/workflows/docker-build.yml@main
     with:
-      registry: 'registry.xnxktech.net'
+      registry: 'xnxktech.tencentcloudcr.com'
       platforms: linux/amd64,linux/arm64
     secrets:
       USERNAME: ${{ secrets.REGISTRY_USER }}
