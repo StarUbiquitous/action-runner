@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:1.19-buster as golang
+FROM docker.io/library/golang:1.20-buster as golang
 
 FROM ubuntu:20.04
 
