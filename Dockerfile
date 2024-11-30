@@ -1,6 +1,6 @@
 FROM docker.io/library/golang:1.20-buster as golang
 
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG TARGETPLATFORM
 ARG RUNNER_VERSION=2.321.0
